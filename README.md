@@ -1,5 +1,7 @@
 # NFC
 
+[![Crates.io](https://img.shields.io/crates/v/nfc.svg?maxAge=2592000)](https://crates.io/crates/nfc)
+
 Rust bindings for the [libnfc](https://github.com/nfc-tools/libnfc) library
 
 ## Installation
