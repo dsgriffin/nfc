@@ -1,8 +1,10 @@
-# NFC
+# nfc
 
 [![Crates.io](https://img.shields.io/crates/v/nfc.svg?maxAge=2592000)](https://crates.io/crates/nfc)
 
-Rust bindings for the [libnfc](https://github.com/nfc-tools/libnfc) library
+Rust bindings for the [libnfc](https://github.com/nfc-tools/libnfc) library.
+
+For raw FFI bindings for `libnfc`, see [nfc-sys](https://github.com/dsgriffin/nfc-sys).
 
 ## Installation
 
@@ -12,23 +14,17 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.0"
+    nfc = "0.1.1"
     
 ## Example Usage
 
 #### // main.rs    
-    extern crate libc;
     extern crate nfc;
     
-    use nfc::nfc_version;
-    use std::ffi::CStr;
-    use std::str;
+    use nfc::version;
     
     fn main() {
-        unsafe {
-            let slice = CStr::from_ptr(nfc_version());
-            println!("libnfc version: {}", slice.to_str().unwrap()); // o: libnfc version: libnfc-1.7.1-79-ge23f8a9
-        }
+        println!("libnfc version: {}", version());
     }
     
 ## Contributing
