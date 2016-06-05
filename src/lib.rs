@@ -5,14 +5,28 @@ extern crate libc;
 
 mod ffi;
 
-use libc::{uint8_t, uint32_t, size_t};
-use std::ptr;
 use std::ffi::CStr;
-use std::str;
-use std::os::raw::c_void;
 
-pub fn device_get_information_about(pnd: ffi::nfc_device, buf: *mut isize) -> i8 {
-    4
+pub fn strerror(pnd: *const ffi::nfc_device) -> &'static str {
+    unsafe {
+        let last_error = CStr::from_ptr(ffi::nfc_strerror(pnd)).to_str().unwrap();
+
+        last_error
+    }
+}
+
+pub fn device_get_last_error(pnd: *const ffi::nfc_device) -> i32 {
+    unsafe {
+        ffi::nfc_device_get_last_error(pnd)
+    }
+}
+
+pub fn str_modulation_type(pnd: ffi::nfc_modulation_type) -> &'static str {
+    unsafe {
+        let modulation_type = CStr::from_ptr(ffi::str_nfc_modulation_type(pnd)).to_str().unwrap();
+
+        modulation_type
+    }
 }
 
 pub fn version() -> &'static str {
