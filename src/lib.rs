@@ -7,6 +7,32 @@ mod ffi;
 
 use std::ffi::CStr;
 
+pub fn register_driver(ndr: *const ffi::nfc_driver) {
+    unsafe {
+        ffi::nfc_register_driver(ndr);
+    }
+}
+
+pub fn init(context: *mut *mut ffi::nfc_context) {
+    unsafe {
+        ffi::nfc_init(context);
+    }
+}
+
+pub fn exit(context: *mut ffi::nfc_context) {
+    unsafe {
+        ffi::nfc_exit(context);
+    }
+}
+
+
+pub fn open(context: *mut ffi::nfc_context, connstring: ffi::nfc_connstring) {
+    unsafe {
+        ffi::nfc_open(context, connstring);
+    }
+}
+
+
 pub fn strerror(pnd: *const ffi::nfc_device) -> &'static str {
     unsafe {
         let last_error = CStr::from_ptr(ffi::nfc_strerror(pnd)).to_str().unwrap();

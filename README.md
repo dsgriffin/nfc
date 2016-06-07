@@ -14,7 +14,7 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.3"
+    nfc = "0.1.4"
     
 ## Example Usage
 
@@ -31,11 +31,15 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
 ##### [Library initialization/deinitialization](http://www.libnfc.org/api/modules.html) methods:
 
- -
+&#x2713; [nfc_register_device](http://www.libnfc.org/api/group__lib.html#ga5839bbf10f761302e1f2c1ad02c72e82) -> `register_device`
+
+&#x2713; [nfc_init](http://www.libnfc.org/api/group__lib.html#gae494d97ba0cc10efda9065a07c8900a8) -> `init`
+
+&#x2713; [nfc_exit](http://www.libnfc.org/api/group__lib.html#gabd34e0cc381699d6aec73bf993105400) -> `exit`
 
 ##### [NFC Device/Hardware manipulation](http://www.libnfc.org/api/group__dev.html) methods: 
 
- -
+&#x2713; [nfc_open](http://www.libnfc.org/api/group__dev.html#ga9a0b9811c0e7f93e7474db82a1fb4501) -> `open`
  
 ##### [NFC Initiator](http://www.libnfc.org/api/group__initiator.html) methods:  
 
