@@ -14,7 +14,7 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.4"
+    nfc = "0.1.5"
     
 ## Example Usage
 
@@ -29,50 +29,42 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
     
 ## Implemented/TODO
 
-##### [Library initialization/deinitialization](http://www.libnfc.org/api/modules.html) methods:
+##### [Library initialization/deinitialization](http://www.libnfc.org/api/modules.html) methods (3 out of 3 implemented):
 
-&#x2713; [nfc_register_device](http://www.libnfc.org/api/group__lib.html#ga5839bbf10f761302e1f2c1ad02c72e82) -> `register_device`
+As `register_device`, `init` and `exit`.
 
-&#x2713; [nfc_init](http://www.libnfc.org/api/group__lib.html#gae494d97ba0cc10efda9065a07c8900a8) -> `init`
-
-&#x2713; [nfc_exit](http://www.libnfc.org/api/group__lib.html#gabd34e0cc381699d6aec73bf993105400) -> `exit`
-
-##### [NFC Device/Hardware manipulation](http://www.libnfc.org/api/group__dev.html) methods: 
-
-&#x2713; [nfc_open](http://www.libnfc.org/api/group__dev.html#ga9a0b9811c0e7f93e7474db82a1fb4501) -> `open`
+##### [NFC Device/Hardware manipulation](http://www.libnfc.org/api/group__dev.html) methods (5 out of 5 implemented):
  
-##### [NFC Initiator](http://www.libnfc.org/api/group__initiator.html) methods:  
+As `open`, `close`, `list_devices`, `idle` and `abort_command`.
 
- -
+##### [NFC Initiator](http://www.libnfc.org/api/group__initiator.html) methods (2 out of 12 implemented):  
+
+As `initiator_init` and `initiator_init_secure_element`.
  
-##### [NFC Target](http://www.libnfc.org/api/group__target.html) methods:  
+##### [NFC Target](http://www.libnfc.org/api/group__target.html) methods (5 out of 5 implemented):  
 
- -
+As `target_init`, `target_send_bytes`, `target_receive_bytes`, `target_send_bits` and `target_receive_bits`.
  
-##### [Error Reporting](http://www.libnfc.org/api/group__error.html) methods:  
+##### [Error Reporting](http://www.libnfc.org/api/group__error.html) methods (4 out of 4 implemented):
+  
+As `strerror`, `strerror_r`, `perror` and `device_get_last_error`.
 
-&#x2713; [nfc_strerror](http://www.libnfc.org/api/group__error.html#gab7864c2678696e920b966f47986d31d9) -> `strerror`
+##### [Special Data Accessors](http://www.libnfc.org/api/group__data.html) methods (4 out of 4 implemented):  
 
-&#x2713; [nfc_device_get_last_error](http://www.libnfc.org/api/group__error.html#gacca948e9866dacdc680187343f460341) -> `device_get_last_error`
+As `device_get_name`, `device_get_connstring`, `device_get_supported_modulation` and `device_get_supported_baud_rate`.
  
-##### [Special Data Accessors](http://www.libnfc.org/api/group__data.html) methods:  
+##### [Properties Accessors](http://www.libnfc.org/api/group__properties.html) methods (2 out of 2 implemented):  
 
- -
+As `device_set_property_int` and `device_set_property_bool`.
  
-##### [Properties Accessors](http://www.libnfc.org/api/group__properties.html) methods:  
+##### [Miscellaneous](http://www.libnfc.org/api/group__misc.html) methods (1 out of 3 implemented):  
 
- -
+As `version`.
  
-##### [Miscellaneous](http://www.libnfc.org/api/group__misc.html) methods:  
-
-&#x2713; [nfc_version](http://www.libnfc.org/api/group__misc.html#gaa48f27c0f93d6508ad9a5ae01ab054d4) -> `version`
- 
-##### [To-string Converters](http://www.libnfc.org/api/group__string-converter.html) methods:  
-
-&#x2713; [str_nfc_baud_rate](http://www.libnfc.org/api/group__string-converter.html#ga3c105fdfaf8753b33246d131fbeb95db) -> `str_baud_rate`
-
-&#x2713; [str_nfc_modulation_type](http://www.libnfc.org/api/group__string-converter.html#gaa349f6eabeb7dbc5b03e92a9bcdc8733) -> `str_modulation_type`
-    
+##### [To-string Converters](http://www.libnfc.org/api/group__string-converter.html) methods (2 out of 3 implemented):
+  
+As `str_baud_rate` and `str_modulation_type`.
+  
 ## Contributing
     
 I'm brand new to Rust so any help or constructive information would be really appreciated. Thanks in advance!    
