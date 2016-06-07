@@ -1,6 +1,6 @@
 [package]
 name = "nfc"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Daniel Griffin <danielseangriffin@gmail.com>"]
 description = "Rust bindings for the libnfc library"
 documentation = "https://github.com/dsgriffin/nfc"

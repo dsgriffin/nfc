@@ -14,7 +14,7 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.5"
+    nfc = "0.1.6"
     
 ## Example Usage
 
@@ -37,9 +37,9 @@ As `register_device`, `init` and `exit`.
  
 As `open`, `close`, `list_devices`, `idle` and `abort_command`.
 
-##### [NFC Initiator](http://www.libnfc.org/api/group__initiator.html) methods (2 out of 12 implemented):  
+##### [NFC Initiator](http://www.libnfc.org/api/group__initiator.html) methods (12 out of 12 implemented):  
 
-As `initiator_init` and `initiator_init_secure_element`.
+As `initiator_init`, `initiator_init_secure_element`, `initiator_select_passive_target`, `initiator_list_passive_targets`, `initiator_poll_target`, `initiator_select_dep_target`, `initiator_poll_dep_target`, `initiator_transceive_bytes`, `initiator_transceive_bits`, `initiator_transceive_bytes_timed`, `initiator_target_is_present` and `initiator_transceive_bits_timed`.
  
 ##### [NFC Target](http://www.libnfc.org/api/group__target.html) methods (5 out of 5 implemented):  
 
@@ -57,13 +57,13 @@ As `device_get_name`, `device_get_connstring`, `device_get_supported_modulation`
 
 As `device_set_property_int` and `device_set_property_bool`.
  
-##### [Miscellaneous](http://www.libnfc.org/api/group__misc.html) methods (1 out of 3 implemented):  
+##### [Miscellaneous](http://www.libnfc.org/api/group__misc.html) methods (3 out of 3 implemented):  
 
-As `version`.
+As `version`, `free` and `device_get_information_about`.
  
 ##### [To-string Converters](http://www.libnfc.org/api/group__string-converter.html) methods (2 out of 3 implemented):
   
-As `str_baud_rate` and `str_modulation_type`.
+As `str_baud_rate`, `str_modulation_type` and `str_target`.
   
 ## Contributing
     
