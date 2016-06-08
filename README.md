@@ -61,7 +61,7 @@ As `device_set_property_int` and `device_set_property_bool`.
 
 As `version`, `free` and `device_get_information_about`.
  
-##### [To-string Converters](http://www.libnfc.org/api/group__string-converter.html) methods (2 out of 3 implemented):
+##### [To-string Converters](http://www.libnfc.org/api/group__string-converter.html) methods (3 out of 3 implemented):
   
 As `str_baud_rate`, `str_modulation_type` and `str_target`.
   
