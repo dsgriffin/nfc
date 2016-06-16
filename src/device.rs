@@ -1,4 +1,5 @@
 use ::ffi;
+use std::ffi::CStr;
 
 /// Special data accessors
 
