@@ -1,24 +1,26 @@
 use ::ffi;
+
 use ::libc::size_t;
 
 /// NFC target
+/// See http://www.libnfc.org/api/group__target.html
 
-pub fn init(pnd: *mut ffi::nfc_device, pnt: *mut ffi::nfc_target, pbtRx: *mut u8, szRx: size_t, timeout: i32) -> i32 {
-    unsafe { ffi::nfc_target_init(pnd, pnt, pbtRx, szRx, timeout) }
+pub fn init(pnd: *mut ffi::nfc_device, pnt: *mut ffi::nfc_target, pbt_rx: *mut u8, sz_rx: size_t, timeout: i32) -> i32 {
+    unsafe { ffi::nfc_target_init(pnd, pnt, pbt_rx, sz_rx, timeout) }
 }
 
-pub fn send_bytes(pnd: *mut ffi::nfc_device, pbtTx: *mut u8, szTx: size_t, timeout: i32) -> i32 {
-    unsafe { ffi::nfc_target_send_bytes(pnd, pbtTx, szTx, timeout) }
+pub fn send_bytes(pnd: *mut ffi::nfc_device, pbt_tx: *mut u8, sz_tx: size_t, timeout: i32) -> i32 {
+    unsafe { ffi::nfc_target_send_bytes(pnd, pbt_tx, sz_tx, timeout) }
 }
 
-pub fn receive_bytes(pnd: *mut ffi::nfc_device, pbtRx: *mut u8, szRx: size_t, timeout: i32) -> i32 {
-    unsafe { ffi::nfc_target_receive_bytes(pnd, pbtRx, szRx, timeout) }
+pub fn receive_bytes(pnd: *mut ffi::nfc_device, pbt_rx: *mut u8, sz_rx: size_t, timeout: i32) -> i32 {
+    unsafe { ffi::nfc_target_receive_bytes(pnd, pbt_rx, sz_rx, timeout) }
 }
 
-pub fn send_bits(pnd: *mut ffi::nfc_device, pbtTx: *mut u8, szTx: size_t, pbtTxPar: *mut u8) -> i32 {
-    unsafe { ffi::nfc_target_send_bits(pnd, pbtTx, szTx, pbtTxPar) }
+pub fn send_bits(pnd: *mut ffi::nfc_device, pbt_tx: *mut u8, sz_tx: size_t, pbt_tx_par: *mut u8) -> i32 {
+    unsafe { ffi::nfc_target_send_bits(pnd, pbt_tx, sz_tx, pbt_tx_par) }
 }
 
-pub fn receive_bits(pnd: *mut ffi::nfc_device, pbtRx: *mut u8, szRx: size_t, pbtRxPar: *mut u8) -> i32 {
-    unsafe { ffi::nfc_target_receive_bits(pnd, pbtRx, szRx, pbtRxPar) }
+pub fn receive_bits(pnd: *mut ffi::nfc_device, pbt_rx: *mut u8, sz_rx: size_t, pbt_rx_par: *mut u8) -> i32 {
+    unsafe { ffi::nfc_target_receive_bits(pnd, pbt_rx, sz_rx, pbt_rx_par) }
 }

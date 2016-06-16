@@ -1,7 +1,9 @@
 use ::ffi;
+
 use std::ffi::CStr;
 
 /// Special data accessors
+/// See http://www.libnfc.org/api/group__data.html
 
 pub fn get_name(pnd: *mut ffi::nfc_device) -> &'static str {
     unsafe {
@@ -28,11 +30,12 @@ pub fn get_supported_baud_rate(pnd: *mut ffi::nfc_device, nmt: ffi::nfc_modulati
 }
 
 /// Properties accessors
+/// See http://www.libnfc.org/api/group__properties.html
 
 pub fn set_property_int(pnd: *mut ffi::nfc_device, property: ffi::nfc_property, value: i32) -> i32 {
     unsafe { ffi::nfc_device_set_property_int(pnd, property, value) }
 }
 
-pub fn set_property_bool(pnd: *mut ffi::nfc_device, property: ffi::nfc_property, bEnable: u8) -> i32 {
-    unsafe { ffi::nfc_device_set_property_bool(pnd, property, bEnable) }
+pub fn set_property_bool(pnd: *mut ffi::nfc_device, property: ffi::nfc_property, b_enable: u8) -> i32 {
+    unsafe { ffi::nfc_device_set_property_bool(pnd, property, b_enable) }
 }
