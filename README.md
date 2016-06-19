@@ -14,7 +14,7 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.8"
+    nfc = "0.1.9"
     
 ## Example Usage
 

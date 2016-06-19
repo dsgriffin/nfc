@@ -1,6 +1,6 @@
 [package]
 name = "nfc"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["Daniel Griffin <danielseangriffin@gmail.com>"]
 description = "Rust bindings for the libnfc library"
 documentation = "https://github.com/dsgriffin/nfc"
@@ -12,4 +12,4 @@ license = "MIT"
 
 [dependencies]
 libc = "0.2.0"
-nfc-sys = "0.1.2"
+nfc-sys = "0.1.3"
