@@ -1,9 +1,6 @@
 use libc::{uint8_t, uint32_t, size_t};
-use std::ptr;
 
-pub enum Struct_nfc_context {
-    nfc_init(*mut Struct_nfc_context)
-}
+pub enum Struct_nfc_context { }
 pub type nfc_context = Struct_nfc_context;
 pub enum Struct_nfc_device { }
 pub type nfc_device = Struct_nfc_device;
