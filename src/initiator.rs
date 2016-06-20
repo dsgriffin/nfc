@@ -1,6 +1,13 @@
 use ::ffi;
 use ::libc::size_t;
 
+// Internal
+
+/// Prepare Initiator data
+pub fn prepare_initiator_data(nm: ffi::nfc_modulation, ppbt_initiator_data: *mut *mut u8, psz_initiator_data: *mut usize) {
+    unsafe { ffi::prepare_initiator_data(nm, ppbt_initiator_data, psz_initiator_data) }
+}
+
 // NFC initiator methods
 // See http://www.libnfc.org/api/group__initiator.html
 

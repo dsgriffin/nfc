@@ -8,6 +8,7 @@ pub mod ffi;
 pub mod initiator;
 pub mod target;
 pub mod device;
+pub mod context;
 pub mod error;
 pub mod misc;
 pub mod to_str;

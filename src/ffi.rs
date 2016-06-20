@@ -1,15 +1,111 @@
 #![allow(dead_code, non_camel_case_types, non_upper_case_globals, non_snake_case)]
 
-#[link(name = "nfc", kind = "dylib")]
+#[link(name = "nfc_sys", kind = "dylib")]
 
-use libc::{uint8_t, uint32_t, size_t};
+extern crate libc;
 
-pub enum Struct_nfc_context { }
-pub type nfc_context = Struct_nfc_context;
-pub enum Struct_nfc_device { }
-pub type nfc_device = Struct_nfc_device;
-pub enum Struct_nfc_driver { }
-pub type nfc_driver = Struct_nfc_driver;
+use self::libc::{uint8_t, uint32_t, size_t};
+
+#[derive(Copy, Clone)]
+#[repr(u32)]
+#[derive(Debug)]
+pub enum scan_type_enum {
+    NOT_INTRUSIVE = 0,
+    INTRUSIVE = 1,
+    NOT_AVAILABLE = 2,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[derive(Debug)]
+pub struct nfc_driver {
+    pub name: *const ::std::os::raw::c_char,
+    pub scan_type: scan_type_enum,
+    pub scan: ::std::option::Option<unsafe extern "C" fn(context: *const nfc_context, connstrings: *mut nfc_connstring, connstrings_len: size_t) -> size_t>,
+    pub open: ::std::option::Option<unsafe extern "C" fn(context: *const nfc_context, connstring: nfc_connstring) -> *mut nfc_device>,
+    pub close: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device)>,
+
+    pub strerror: ::std::option::Option<unsafe extern "C" fn(pnd: *const nfc_device) -> *const ::std::os::raw::c_char>,
+
+    pub initiator_init: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+    pub initiator_init_secure_element: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+    pub initiator_select_passive_target: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, nm: nfc_modulation, pbtInitData: *const uint8_t, szInitData: size_t, pnt: *mut nfc_target) -> ::std::os::raw::c_int>,
+    pub initiator_poll_target: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pnmModulations: *const nfc_modulation, szModulations: size_t, uiPollNr: uint8_t, btPeriod: uint8_t, pnt: *mut nfc_target) -> ::std::os::raw::c_int>,
+    pub initiator_select_dep_target: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, ndm: nfc_dep_mode, nbr: nfc_baud_rate, pndiInitiator: *const nfc_dep_info, pnt: *mut nfc_target, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub initiator_deselect_target: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+    pub initiator_transceive_bytes: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, pbtRx: *mut uint8_t, szRx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub initiator_transceive_bits: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t, pbtRx: *mut uint8_t, pbtRxPar: *mut uint8_t) -> ::std::os::raw::c_int>,
+    pub initiator_transceive_bytes_timed: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, pbtRx: *mut uint8_t, szRx: size_t, cycles: *mut uint32_t) -> ::std::os::raw::c_int>,
+    pub initiator_transceive_bits_timed: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t, pbtRx: *mut uint8_t, pbtRxPar: *mut uint8_t, cycles: *mut uint32_t) -> ::std::os::raw::c_int>,
+    pub initiator_target_is_present: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pnt: *const nfc_target) -> ::std::os::raw::c_int>,
+
+    pub target_init: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pnt: *mut nfc_target, pbtRx: *mut uint8_t, szRx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub target_send_bytes: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub target_receive_bytes: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtRx: *mut uint8_t, szRxLen: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub target_send_bits: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t) -> ::std::os::raw::c_int>,
+    pub target_receive_bits: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, pbtRx: *mut uint8_t, szRxLen: size_t, pbtRxPar: *mut uint8_t) -> ::std::os::raw::c_int>,
+
+    pub device_set_property_bool: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, property: nfc_property, bEnable: u8) -> ::std::os::raw::c_int>,
+    pub device_set_property_int: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, property: nfc_property, value: ::std::os::raw::c_int) -> ::std::os::raw::c_int>,
+    pub get_supported_modulation: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, mode: nfc_mode, supported_mt: *mut *const nfc_modulation_type) -> ::std::os::raw::c_int>,
+    pub get_supported_baud_rate: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, mode: nfc_mode, nmt: nfc_modulation_type, supported_br: *mut *const nfc_baud_rate) -> ::std::os::raw::c_int>,
+    pub device_get_information_about: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device, buf: *mut *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int>,
+
+    pub abort_command: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+    pub idle: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+    pub powerdown: ::std::option::Option<unsafe extern "C" fn(pnd: *mut nfc_device) -> ::std::os::raw::c_int>,
+}
+impl ::std::default::Default for nfc_driver {
+    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+}
+#[repr(C)]
+#[derive(Copy)]
+pub struct nfc_user_defined_device {
+    pub name: [::std::os::raw::c_char; 256usize],
+    pub connstring: nfc_connstring,
+    pub optional: u8,
+}
+impl ::std::clone::Clone for nfc_user_defined_device {
+    fn clone(&self) -> Self { *self }
+}
+impl ::std::default::Default for nfc_user_defined_device {
+    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct nfc_context {
+    pub allow_autoscan: u8,
+    pub allow_intrusive_scan: u8,
+    pub log_level: uint32_t,
+    pub user_defined_devices: [nfc_user_defined_device; 4usize],
+    pub user_defined_device_count: ::std::os::raw::c_uint,
+}
+impl ::std::default::Default for nfc_context {
+    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+}
+#[repr(C)]
+#[derive(Copy)]
+pub struct nfc_device {
+    pub context: *const nfc_context,
+    pub driver: *const nfc_driver,
+    pub driver_data: *mut ::std::os::raw::c_void,
+    pub chip_data: *mut ::std::os::raw::c_void,
+    pub name: [::std::os::raw::c_char; 256usize],
+    pub connstring: nfc_connstring,
+    pub bCrc: u8,
+    pub bPar: u8,
+    pub bEasyFraming: u8,
+    pub bInfiniteSelect: u8,
+    pub bAutoIso14443_4: u8,
+    pub btSupportByte: uint8_t,
+    pub last_error: ::std::os::raw::c_int,
+}
+impl ::std::clone::Clone for nfc_device {
+    fn clone(&self) -> Self { *self }
+}
+impl ::std::default::Default for nfc_device {
+    fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+}
+
 pub type nfc_connstring = [::std::os::raw::c_char; 1024usize];
 #[derive(Copy, Clone)]
 #[repr(u32)]
@@ -236,159 +332,69 @@ pub type nfc_target = Struct_Unnamed16;
 
 #[link(name = "nfc", kind = "dylib")]
 extern "C" {
+    pub fn nfc_context_new() -> *mut nfc_context;
+    pub fn nfc_context_free(context: *mut nfc_context);
+    pub fn nfc_device_new(context: *const nfc_context, connstring: nfc_connstring) -> *mut nfc_device;
+    pub fn nfc_device_free(dev: *mut nfc_device);
+    pub fn string_as_boolean(s: *const ::std::os::raw::c_char, value: *mut u8);
+    pub fn iso14443_cascade_uid(abtUID: *mut uint8_t, szUID: size_t, pbtCascadedUID: *mut uint8_t, pszCascadedUID: *mut size_t);
+    pub fn prepare_initiator_data(nm: nfc_modulation, ppbtInitiatorData: *mut *mut uint8_t, pszInitiatorData: *mut size_t);
+    pub fn connstring_decode(connstring: nfc_connstring, driver_name: *const ::std::os::raw::c_char, bus_name: *const ::std::os::raw::c_char, pparam1: *mut *mut ::std::os::raw::c_char, pparam2: *mut *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+
     pub fn nfc_init(context: *mut *mut nfc_context);
     pub fn nfc_exit(context: *mut nfc_context);
-    pub fn nfc_register_driver(driver: *const nfc_driver)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_open(context: *mut nfc_context, connstring: nfc_connstring)
-        -> *mut nfc_device;
+    pub fn nfc_register_driver(driver: *const nfc_driver) -> ::std::os::raw::c_int;
+
+    pub fn nfc_open(context: *mut nfc_context, connstring: nfc_connstring) -> *mut nfc_device;
     pub fn nfc_close(pnd: *mut nfc_device);
     pub fn nfc_abort_command(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
-    pub fn nfc_list_devices(context: *mut nfc_context,
-        connstrings: *mut nfc_connstring,
-        connstrings_len: size_t) -> size_t;
+    pub fn nfc_list_devices(context: *mut nfc_context, connstrings: *mut nfc_connstring, connstrings_len: size_t) -> size_t;
     pub fn nfc_idle(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
+
     pub fn nfc_initiator_init(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_init_secure_element(pnd: *mut nfc_device)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_select_passive_target(pnd: *mut nfc_device,
-        nm: nfc_modulation,
-        pbtInitData: *const uint8_t,
-        szInitData: size_t,
-        pnt: *mut nfc_target)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_list_passive_targets(pnd: *mut nfc_device,
-        nm: nfc_modulation,
-        ant: *mut nfc_target,
-        szTargets: size_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_poll_target(pnd: *mut nfc_device,
-        pnmTargetTypes: *const nfc_modulation,
-        szTargetTypes: size_t, uiPollNr: uint8_t,
-        uiPeriod: uint8_t, pnt: *mut nfc_target)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_select_dep_target(pnd: *mut nfc_device,
-        ndm: nfc_dep_mode,
-        nbr: nfc_baud_rate,
-        pndiInitiator: *const nfc_dep_info,
-        pnt: *mut nfc_target,
-        timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_poll_dep_target(pnd: *mut nfc_device,
-        ndm: nfc_dep_mode,
-        nbr: nfc_baud_rate,
-        pndiInitiator: *const nfc_dep_info,
-        pnt: *mut nfc_target,
-        timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_deselect_target(pnd: *mut nfc_device)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_transceive_bytes(pnd: *mut nfc_device,
-        pbtTx: *const uint8_t, szTx: size_t,
-        pbtRx: *mut uint8_t, szRx: size_t,
-        timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_transceive_bits(pnd: *mut nfc_device,
-        pbtTx: *const uint8_t,
-        szTxBits: size_t,
-        pbtTxPar: *const uint8_t,
-        pbtRx: *mut uint8_t, szRx: size_t,
-        pbtRxPar: *mut uint8_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_transceive_bytes_timed(pnd: *mut nfc_device,
-        pbtTx: *const uint8_t,
-        szTx: size_t,
-        pbtRx: *mut uint8_t,
-        szRx: size_t,
-        cycles: *mut uint32_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_transceive_bits_timed(pnd: *mut nfc_device,
-        pbtTx: *const uint8_t,
-        szTxBits: size_t,
-        pbtTxPar: *const uint8_t,
-        pbtRx: *mut uint8_t,
-        szRx: size_t,
-        pbtRxPar: *mut uint8_t,
-        cycles: *mut uint32_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_initiator_target_is_present(pnd: *mut nfc_device,
-        pnt: *const nfc_target)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_target_init(pnd: *mut nfc_device, pnt: *mut nfc_target,
-        pbtRx: *mut uint8_t, szRx: size_t,
-        timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_target_send_bytes(pnd: *mut nfc_device, pbtTx: *const uint8_t,
-        szTx: size_t, timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_target_receive_bytes(pnd: *mut nfc_device, pbtRx: *mut uint8_t,
-        szRx: size_t,
-        timeout: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_target_send_bits(pnd: *mut nfc_device, pbtTx: *const uint8_t,
-        szTxBits: size_t, pbtTxPar: *const uint8_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_target_receive_bits(pnd: *mut nfc_device, pbtRx: *mut uint8_t,
-        szRx: size_t, pbtRxPar: *mut uint8_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_strerror(pnd: *const nfc_device)
-        -> *const ::std::os::raw::c_char;
-    pub fn nfc_strerror_r(pnd: *const nfc_device,
-        buf: *mut ::std::os::raw::c_char, buflen: size_t)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_perror(pnd: *const nfc_device,
-        s: *const ::std::os::raw::c_char);
-    pub fn nfc_device_get_last_error(pnd: *const nfc_device)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_device_get_name(pnd: *mut nfc_device)
-        -> *const ::std::os::raw::c_char;
-    pub fn nfc_device_get_connstring(pnd: *mut nfc_device)
-        -> *const ::std::os::raw::c_char;
-    pub fn nfc_device_get_supported_modulation(pnd: *mut nfc_device,
-        mode: nfc_mode,
-        supported_mt:
-        *mut *const nfc_modulation_type)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_device_get_supported_baud_rate(pnd: *mut nfc_device,
-        nmt: nfc_modulation_type,
-        supported_br:
-        *mut *const nfc_baud_rate)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_device_get_supported_baud_rate_target_mode(pnd:
-    *mut nfc_device,
-        nmt:
-        nfc_modulation_type,
-        supported_br:
-        *mut *const nfc_baud_rate)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_device_set_property_int(pnd: *mut nfc_device,
-        property: nfc_property,
-        value: ::std::os::raw::c_int)
-        -> ::std::os::raw::c_int;
-    pub fn nfc_device_set_property_bool(pnd: *mut nfc_device,
-        property: nfc_property, bEnable: u8)
-        -> ::std::os::raw::c_int;
-    pub fn iso14443a_crc(pbtData: *mut uint8_t, szLen: size_t,
-        pbtCrc: *mut uint8_t);
+    pub fn nfc_initiator_init_secure_element(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_select_passive_target(pnd: *mut nfc_device, nm: nfc_modulation, pbtInitData: *const uint8_t, szInitData: size_t, pnt: *mut nfc_target) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_list_passive_targets(pnd: *mut nfc_device, nm: nfc_modulation, ant: *mut nfc_target, szTargets: size_t) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_poll_target(pnd: *mut nfc_device, pnmTargetTypes: *const nfc_modulation, szTargetTypes: size_t, uiPollNr: uint8_t, uiPeriod: uint8_t, pnt: *mut nfc_target) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_select_dep_target(pnd: *mut nfc_device, ndm: nfc_dep_mode, nbr: nfc_baud_rate, pndiInitiator: *const nfc_dep_info, pnt: *mut nfc_target, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_poll_dep_target(pnd: *mut nfc_device, ndm: nfc_dep_mode, nbr: nfc_baud_rate, pndiInitiator: *const nfc_dep_info, pnt: *mut nfc_target, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_deselect_target(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_transceive_bytes(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, pbtRx: *mut uint8_t, szRx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_transceive_bits(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t, pbtRx: *mut uint8_t, szRx: size_t, pbtRxPar: *mut uint8_t) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_transceive_bytes_timed(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, pbtRx: *mut uint8_t, szRx: size_t, cycles: *mut uint32_t) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_transceive_bits_timed(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t, pbtRx: *mut uint8_t, szRx: size_t, pbtRxPar: *mut uint8_t, cycles: *mut uint32_t) -> ::std::os::raw::c_int;
+    pub fn nfc_initiator_target_is_present(pnd: *mut nfc_device, pnt: *const nfc_target) -> ::std::os::raw::c_int;
+
+    pub fn nfc_target_init(pnd: *mut nfc_device, pnt: *mut nfc_target, pbtRx: *mut uint8_t, szRx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_target_send_bytes(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_target_receive_bytes(pnd: *mut nfc_device, pbtRx: *mut uint8_t, szRx: size_t, timeout: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_target_send_bits(pnd: *mut nfc_device, pbtTx: *const uint8_t, szTxBits: size_t, pbtTxPar: *const uint8_t) -> ::std::os::raw::c_int;
+    pub fn nfc_target_receive_bits(pnd: *mut nfc_device, pbtRx: *mut uint8_t, szRx: size_t, pbtRxPar: *mut uint8_t) -> ::std::os::raw::c_int;
+
+    pub fn nfc_strerror(pnd: *const nfc_device) -> *const ::std::os::raw::c_char;
+    pub fn nfc_strerror_r(pnd: *const nfc_device, buf: *mut ::std::os::raw::c_char, buflen: size_t) -> ::std::os::raw::c_int;
+    pub fn nfc_perror(pnd: *const nfc_device, s: *const ::std::os::raw::c_char);
+
+    pub fn nfc_device_get_last_error(pnd: *const nfc_device) -> ::std::os::raw::c_int;
+    pub fn nfc_device_get_name(pnd: *mut nfc_device) -> *const ::std::os::raw::c_char;
+    pub fn nfc_device_get_connstring(pnd: *mut nfc_device) -> *const ::std::os::raw::c_char;
+    pub fn nfc_device_get_supported_modulation(pnd: *mut nfc_device, mode: nfc_mode, supported_mt: *mut *const nfc_modulation_type) -> ::std::os::raw::c_int;
+    pub fn nfc_device_get_supported_baud_rate(pnd: *mut nfc_device, nmt: nfc_modulation_type, supported_br: *mut *const nfc_baud_rate) -> ::std::os::raw::c_int;
+    pub fn nfc_device_get_supported_baud_rate_target_mode(pnd: *mut nfc_device, nmt: nfc_modulation_type, supported_br: *mut *const nfc_baud_rate) -> ::std::os::raw::c_int;
+    pub fn nfc_device_set_property_int(pnd: *mut nfc_device, property: nfc_property, value: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn nfc_device_set_property_bool(pnd: *mut nfc_device, property: nfc_property, bEnable: u8) -> ::std::os::raw::c_int;
+
+    pub fn iso14443a_crc(pbtData: *mut uint8_t, szLen: size_t, pbtCrc: *mut uint8_t);
     pub fn iso14443a_crc_append(pbtData: *mut uint8_t, szLen: size_t);
-    pub fn iso14443b_crc(pbtData: *mut uint8_t, szLen: size_t,
-        pbtCrc: *mut uint8_t);
+    pub fn iso14443b_crc(pbtData: *mut uint8_t, szLen: size_t, pbtCrc: *mut uint8_t);
     pub fn iso14443b_crc_append(pbtData: *mut uint8_t, szLen: size_t);
-    pub fn iso14443a_locate_historical_bytes(pbtAts: *mut uint8_t,
-        szAts: size_t,
-        pszTk: *mut size_t)
-        -> *mut uint8_t;
+    pub fn iso14443a_locate_historical_bytes(pbtAts: *mut uint8_t, szAts: size_t, pszTk: *mut size_t) -> *mut uint8_t;
+
     pub fn nfc_free(p: *mut ::std::os::raw::c_void);
     pub fn nfc_version() -> *const ::std::os::raw::c_char;
-    pub fn nfc_device_get_information_about(pnd: *mut nfc_device,
-        buf:
-        *mut *mut ::std::os::raw::c_char)
-        -> ::std::os::raw::c_int;
-    pub fn str_nfc_modulation_type(nmt: nfc_modulation_type)
-        -> *const ::std::os::raw::c_char;
-    pub fn str_nfc_baud_rate(nbr: nfc_baud_rate)
-        -> *const ::std::os::raw::c_char;
-    pub fn str_nfc_target(buf: *mut *mut ::std::os::raw::c_char,
-        pnt: *const nfc_target, verbose: u8)
-        -> ::std::os::raw::c_int;
+    pub fn nfc_device_get_information_about(pnd: *mut nfc_device, buf: *mut *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+
+    pub fn str_nfc_modulation_type(nmt: nfc_modulation_type) -> *const ::std::os::raw::c_char;
+    pub fn str_nfc_baud_rate(nbr: nfc_baud_rate) -> *const ::std::os::raw::c_char;
+    pub fn str_nfc_target(buf: *mut *mut ::std::os::raw::c_char, pnt: *const nfc_target, verbose: u8) -> ::std::os::raw::c_int;
 }

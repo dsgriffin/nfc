@@ -2,6 +2,18 @@ use ::ffi;
 
 use std::ffi::CStr;
 
+// Internal
+
+/// New Device
+pub fn new(context: *const ffi::nfc_context, connstring: ffi::nfc_connstring) -> *mut ffi::nfc_device {
+    unsafe { ffi::nfc_device_new(context, connstring) }
+}
+
+/// Free Device
+pub fn free(dev: *mut ffi::nfc_device) {
+    unsafe { ffi::nfc_device_free(dev) }
+}
+
 // Special data accessors
 // See http://www.libnfc.org/api/group__data.html
 

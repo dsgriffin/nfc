@@ -14,23 +14,36 @@ Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libn
 
     [dependencies]
     libc = "0.2.0"
-    nfc = "0.1.9"
+    nfc = "0.1.10"
     
 ## Example Usage
 
 #### // main.rs    
-    extern crate nfc;
-    
-    use nfc::misc::version;
-    
-    fn main() {
-        println!("libnfc version: {}", version());
+```rust
+extern crate nfc;
+
+use nfc::context;
+use nfc::misc;
+
+fn main() {
+    let mut context = context::new();
+
+    if context.is_null() {
+        println!("Unable to initialize new NFC context!");
     }
+
+    // Initialize libnfc
+    nfc::init(&mut context);
+    
+    // Print libnfc version
+    println!("libnfc version: {}", misc::version());
+}
+```
     
 ## TODO
 
 * Replace any raw pointers
-* Documentation
+* Documentation + more in-depth examples
   
 ## Contributing
     
