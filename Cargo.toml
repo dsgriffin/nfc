@@ -1,15 +1,15 @@
 [package]
 name = "nfc"
-version = "0.1.10"
+version = "0.1.11"
 authors = ["Daniel Griffin <danielseangriffin@gmail.com>"]
 description = "Rust bindings for the libnfc library"
 documentation = "https://github.com/dsgriffin/nfc"
 homepage = "https://github.com/dsgriffin/nfc"
 repository = "https://github.com/dsgriffin/nfc"
 readme = "README.md"
-keywords = ["device", "communication"]
+keywords = ["device", "communication", "nfc"]
 license = "MIT"
 
 [dependencies]
 libc = "0.2.0"
-nfc-sys = "0.1.4"
+nfc-sys = "0.1.5"

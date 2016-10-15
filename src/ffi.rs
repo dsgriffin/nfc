@@ -151,7 +151,7 @@ impl ::std::default::Default for Struct_Unnamed3 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_dep_info = Struct_Unnamed3;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy)]
 pub struct Struct_Unnamed4 {
     pub abtAtqa: [uint8_t; 2usize],
@@ -168,7 +168,7 @@ impl ::std::default::Default for Struct_Unnamed4 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_iso14443a_info = Struct_Unnamed4;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct Struct_Unnamed5 {
     pub szLen: size_t,
@@ -181,7 +181,7 @@ impl ::std::default::Default for Struct_Unnamed5 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_felica_info = Struct_Unnamed5;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct Struct_Unnamed6 {
     pub abtPupi: [uint8_t; 4usize],
@@ -193,7 +193,7 @@ impl ::std::default::Default for Struct_Unnamed6 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_iso14443b_info = Struct_Unnamed6;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy)]
 pub struct Struct_Unnamed7 {
     pub abtDIV: [uint8_t; 4usize],
@@ -209,7 +209,7 @@ impl ::std::default::Default for Struct_Unnamed7 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_iso14443bi_info = Struct_Unnamed7;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct Struct_Unnamed8 {
     pub abtUID: [uint8_t; 8usize],
@@ -218,7 +218,7 @@ impl ::std::default::Default for Struct_Unnamed8 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_iso14443b2sr_info = Struct_Unnamed8;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct Struct_Unnamed9 {
     pub abtUID: [uint8_t; 4usize],
@@ -229,7 +229,7 @@ impl ::std::default::Default for Struct_Unnamed9 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_iso14443b2ct_info = Struct_Unnamed9;
-#[repr(C)]
+#[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct Struct_Unnamed10 {
     pub btSensRes: [uint8_t; 2usize],
@@ -239,7 +239,7 @@ impl ::std::default::Default for Struct_Unnamed10 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_jewel_info = Struct_Unnamed10;
-#[repr(C)]
+#[repr(C, packed)]
 //#[derive(Copy, Clone)]
 pub struct Union_Unnamed11 {
     pub _bindgen_data_: [u8; 283usize],
@@ -284,17 +284,16 @@ impl ::std::default::Default for Union_Unnamed11 {
 pub type nfc_target_info = Union_Unnamed11;
 #[derive(Copy, Clone)]
 #[repr(u32)]
-pub enum Enum_Unnamed12 {
+pub enum nfc_baud_rate {
     NBR_UNDEFINED = 0,
     NBR_106 = 1,
     NBR_212 = 2,
     NBR_424 = 3,
     NBR_847 = 4,
 }
-pub type nfc_baud_rate = Enum_Unnamed12;
 #[derive(Copy, Clone)]
 #[repr(u32)]
-pub enum Enum_Unnamed13 {
+pub enum nfc_modulation_type {
     NMT_ISO14443A = 1,
     NMT_JEWEL = 2,
     NMT_ISO14443B = 3,
@@ -304,7 +303,6 @@ pub enum Enum_Unnamed13 {
     NMT_FELICA = 7,
     NMT_DEP = 8,
 }
-pub type nfc_modulation_type = Enum_Unnamed13;
 #[derive(Copy, Clone)]
 #[repr(u32)]
 pub enum Enum_Unnamed14 { N_TARGET = 0, N_INITIATOR = 1, }
@@ -319,7 +317,7 @@ impl ::std::default::Default for Struct_Unnamed15 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type nfc_modulation = Struct_Unnamed15;
-#[repr(C)]
+#[repr(C, packed)]
 //#[derive(Copy, Clone)]
 pub struct Struct_Unnamed16 {
     pub nti: nfc_target_info,
@@ -345,7 +343,7 @@ extern "C" {
     pub fn nfc_exit(context: *mut nfc_context);
     pub fn nfc_register_driver(driver: *const nfc_driver) -> ::std::os::raw::c_int;
 
-    pub fn nfc_open(context: *mut nfc_context, connstring: nfc_connstring) -> *mut nfc_device;
+    pub fn nfc_open(context: *mut nfc_context, connstring: *const nfc_connstring) -> *mut nfc_device;
     pub fn nfc_close(pnd: *mut nfc_device);
     pub fn nfc_abort_command(pnd: *mut nfc_device) -> ::std::os::raw::c_int;
     pub fn nfc_list_devices(context: *mut nfc_context, connstrings: *mut nfc_connstring, connstrings_len: size_t) -> size_t;

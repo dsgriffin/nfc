@@ -37,7 +37,7 @@ pub fn exit(context: *mut ffi::nfc_context) {
 // http://www.libnfc.org/api/group__dev.html
 
 /// Open an NFC device
-pub fn open(context: *mut ffi::nfc_context, connstring: ffi::nfc_connstring) -> *mut ffi::nfc_device {
+pub fn open(context: *mut ffi::nfc_context, connstring: *const ffi::nfc_connstring) -> *mut ffi::nfc_device {
     unsafe { ffi::nfc_open(context, connstring) }
 }
 
