@@ -1,4 +1,4 @@
-# nfc
+# NFC
 
 [![Crates.io](https://img.shields.io/crates/v/nfc.svg?maxAge=2592000)](https://crates.io/crates/nfc)
 
@@ -47,7 +47,7 @@ fn main() {
   
 ## Contributing
     
-I'm brand new to Rust so any help or constructive information would be really appreciated. Thanks in advance!    
+If you've found a bug or have an idea, feel free to open an Issue. If you've got a fix or feature ready, open a PR. Thanks!
     
 ## License
     
