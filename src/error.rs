@@ -1,31 +1,67 @@
-use ::ffi;
-
-use libc::{c_char, size_t};
+use crate::ffi;
+use std::error;
 use std::ffi::CStr;
+use std::fmt;
 
-// Error reporting
-// See http://www.libnfc.org/api/group__error.html
+/// The result type used throughout this crate's safe API.
+pub type Result<T> = std::result::Result<T, Error>;
 
-/// Returns the last error as a string
-pub fn strerror(pnd: *const ffi::nfc_device) -> &'static str {
-    unsafe {
-        let last_error = CStr::from_ptr(ffi::nfc_strerror(pnd)).to_str().unwrap();
+/// An error reported by libnfc or by this crate's safe wrapper layer.
+///
+/// Errors usually come from a negative libnfc return code, but the safe API
+/// also uses this type for wrapper-level failures such as invalid UTF-8
+/// assumptions or malformed user input.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Error {
+    code: Option<i32>,
+    message: String,
+}
 
-        last_error
+impl Error {
+    /// Creates an error with a message but no libnfc error code.
+    ///
+    /// This is mainly used for wrapper-layer validation failures.
+    pub fn new(message: impl Into<String>) -> Self {
+        Self {
+            code: None,
+            message: message.into(),
+        }
+    }
+
+    /// Creates an error from a libnfc device pointer and error code.
+    pub(crate) fn from_device(device: *mut ffi::nfc_device, code: i32) -> Self {
+        let message = if device.is_null() {
+            format!("libnfc error code {code}")
+        } else {
+            unsafe { CStr::from_ptr(ffi::nfc_strerror(device)).to_string_lossy().into_owned() }
+        };
+
+        Self {
+            code: Some(code),
+            message,
+        }
+    }
+
+    /// Returns the libnfc error code when one is available.
+    ///
+    /// Wrapper-generated errors return `None`.
+    pub fn code(&self) -> Option<i32> {
+        self.code
+    }
+
+    /// Returns the human-readable error message.
+    pub fn message(&self) -> &str {
+        &self.message
     }
 }
 
-/// Renders the last error in pcStrErrBuf for a maximum size of szBufLen chars
-pub fn strerror_r(pnd: *const ffi::nfc_device, pc_str_err_buf: *mut c_char, sz_buf_len: size_t) -> i32 {
-    unsafe { ffi::nfc_strerror_r(pnd, pc_str_err_buf, sz_buf_len) }
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.code {
+            Some(code) => write!(f, "{} ({code})", self.message),
+            None => f.write_str(&self.message),
+        }
+    }
 }
 
-/// Print the last error that occurred on an nfc_device
-pub fn perror(pnd: *const ffi::nfc_device, pc_string: *const c_char) {
-    unsafe { ffi::nfc_perror(pnd, pc_string); }
-}
-
-/// Get the last error (code) that occurred on an nfc_device
-pub fn device_get_last_error(pnd: *const ffi::nfc_device) -> i32 {
-    unsafe { ffi::nfc_device_get_last_error(pnd) }
-}
+impl error::Error for Error {}

@@ -1,15 +1,17 @@
 [package]
 name = "nfc"
-version = "0.1.11"
+version = "1.0.0"
 authors = ["Daniel Griffin <danielseangriffin@gmail.com>"]
-description = "Rust bindings for the libnfc library"
-documentation = "https://github.com/dsgriffin/nfc"
+description = "High-level Rust bindings for the libnfc library"
+documentation = "https://docs.rs/nfc"
 homepage = "https://github.com/dsgriffin/nfc"
 repository = "https://github.com/dsgriffin/nfc"
 readme = "README.md"
 keywords = ["device", "communication", "nfc"]
+categories = ["api-bindings", "hardware-support"]
 license = "MIT"
+edition = "2018"
 
 [dependencies]
 libc = "0.2.0"
-nfc-sys = "0.1.5"
+nfc-sys = "1.0.0"

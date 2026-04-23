@@ -2,53 +2,65 @@
 
 [![Crates.io](https://img.shields.io/crates/v/nfc.svg?maxAge=2592000)](https://crates.io/crates/nfc)
 
-Rust bindings for the [libnfc](https://github.com/nfc-tools/libnfc) library.
+Safe Rust bindings for the [libnfc](https://github.com/nfc-tools/libnfc) library.
 
-For raw FFI bindings for `libnfc`, see [nfc-sys](https://github.com/dsgriffin/nfc-sys).
+This crate builds on top of [nfc-sys](https://github.com/dsgriffin/nfc-sys) and
+focuses on the parts of libnfc that can be wrapped safely with ownership,
+automatic cleanup, and slice-based APIs.
 
 ## Installation
 
-Install `libnfc` (e.g. [Debian/Ubuntu](http://nfc-tools.org/index.php?title=Libnfc#Debian_.2F_Ubuntu), `brew install libnfc` using Homebrew on Mac OSx, or on [other systems](http://nfc-tools.org/index.php?title=Libnfc#Installation)).
+Install `libnfc` first:
 
-### Cargo.toml
+- Debian/Ubuntu: see the [libnfc installation notes](http://nfc-tools.org/index.php?title=Libnfc#Debian_.2F_Ubuntu)
+- macOS: `brew install libnfc`
+- Other systems: see the [libnfc installation guide](http://nfc-tools.org/index.php?title=Libnfc#Installation)
 
-    [dependencies]
-    libc = "0.2.0"
-    nfc = "0.1.11"
-    
-## Example Usage
+Then add:
 
-#### // main.rs    
+```toml
+[dependencies]
+nfc = "1.0.0"
+```
+
+## Example
+
 ```rust
-extern crate nfc;
+use nfc::{version, Context};
 
-use nfc::context;
-use nfc::misc;
+fn main() -> nfc::Result<()> {
+    let context = Context::new()?;
+    println!("libnfc version: {}", version());
 
-fn main() {
-    let mut context = context::new();
-
-    if context.is_null() {
-        println!("Unable to initialize new NFC context!");
+    for connstring in context.list_devices(8)? {
+        println!("found device: {connstring}");
     }
 
-    // Initialize libnfc
-    nfc::init(&mut context);
-    
-    // Print libnfc version
-    println!("libnfc version: {}", misc::version());
+    Ok(())
 }
 ```
-    
-## TODO
 
-* Replace any raw pointers
-* Documentation + more in-depth examples
-  
-## Contributing
-    
-If you've found a bug or have an idea, feel free to open an Issue. If you've got a fix or feature ready, open a PR. Thanks!
-    
+## What Is Safe
+
+`nfc` 1.0.0 now provides safe wrappers for the normal libnfc workflow:
+
+- context creation and cleanup via `Context`
+- device open/close via `Device`
+- string accessors for device names and connection strings
+- device property setters
+- initiator and target send/receive operations using Rust slices
+- device info and target formatting as owned `String`s
+- CRC helpers and ATS historical-byte helpers
+
+## What Stays Raw
+
+Some libnfc entry points cannot honestly be made fully safe without exposing raw
+C invariants. Those remain available through `nfc::ffi`, including:
+
+- custom driver registration
+- emulation state-machine callbacks
+- any workflow that needs direct raw-pointer interop
+
 ## License
-    
-MIT    
+
+MIT
